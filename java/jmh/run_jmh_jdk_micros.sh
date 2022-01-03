@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# This script is based on of one of Monica Beckwith's scripts.
+# This script is based on one of Monica Beckwith's scripts.
 
 function help
 {
@@ -196,7 +196,7 @@ machine_readable_output_file_opt="-rff $machine_readable_output_file"
 format_type_opt="-rf text"
 
 benchmark="-jar $benchmark_jar_path"
-benchmark="$benchmark $fork_opt $synchronize_iterations_opt"
+benchmark="$benchmark $fork_opt $synchronize_iterations_opt $warmup_time_opt"
 benchmark="$benchmark $measurement_iterations_opt $warmup_iterations_opt"
 benchmark="$benchmark $worker_threads_opt $human_readable_output_file_opt"
 benchmark="$benchmark $machine_readable_output_file_opt $format_type_opt"
