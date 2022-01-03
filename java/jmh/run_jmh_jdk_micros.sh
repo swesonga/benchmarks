@@ -205,9 +205,11 @@ run_benchmarks()
     echo "**** $jvm_heap_size_opts $timestamp Benchmarks completed for filter $benchmark_filter_regex ****"
 }
 
+atomics_benchmark_filter="(?i)\.*(atomic|lock|volatile|ConcurrentHashMap|ProducerConsumer|Queues|ThreadLocalRandomNextInt)\.*"
 crypto_benchmark_filter="(?i)crypto"
 
 # Start the actual benchmark run
+run_benchmarks $atomics_benchmark_filter
 run_benchmarks $crypto_benchmark_filter
 
 # Display the date and time when the benchmarks complete
