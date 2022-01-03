@@ -204,6 +204,12 @@ benchmark="$benchmark $machine_readable_output_file_opt $format_type_opt"
 jdk="jdk-17.0.1+12"
 jdk_bin_path="./jdks/$jdk/bin/"
 
+if [ ! -d "$jdk_bin_path" ]; then
+    echo "Warning: Could not find JDK bin path: $jdk_bin_path"
+    echo "Warning: Using the java binary automatically selected by the shell."
+    jdk_bin_path=""
+fi
+
 run_benchmarks()
 {
     date
