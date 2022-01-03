@@ -1,12 +1,12 @@
 #!/bin/bash
 
-# This script is based on of one of Monica Beckwith's scripts.
+# This script is based on one of Monica Beckwith's scripts.
 
 function help
 {
-    echo -e "\nUsage: $0 [GC HeapSizeGB WorkerThreads WarmupIterations MeasurementIterations [JvmArgs]]\n"
-    echo "Example: $0 Parallel 80 4 5 5"
-    echo "Example: $0 g1       80 4 5 5 -XX:MaxGCPauseMillis=30 -XX:MaxNewSize=30g"
+    echo -e "\nUsage: $0 [GC HeapSizeGB WorkerThreads WarmupTimeSeconds WarmupIterations MeasurementIterations [JvmArgs]]\n"
+    echo "Example: $0 Parallel 80 1 10 5 5"
+    echo "Example: $0 g1       80 1 10 5 5 -XX:MaxGCPauseMillis=30 -XX:MaxNewSize=30g"
 }
 
 function validate_numeric_args
@@ -26,21 +26,28 @@ function validate_numeric_args
     fi
 
     if [[ $4 =~ [^0-9] ]]; then
-        echo "Error: invalid warmup iterations $4"
-        echo "Error: please specify a numeric value for warmup iterations."
+        echo "Error: invalid warmup time $4"
+        echo "Error: please specify a numeric value for warmup time in seconds."
         help
         exit 5
     fi
 
     if [[ $5 =~ [^0-9] ]]; then
-        echo "Error: invalid measurement iterations $5"
+        echo "Error: invalid warmup iterations $5"
+        echo "Error: please specify a numeric value for warmup iterations."
+        help
+        exit 6
+    fi
+
+    if [[ $6 =~ [^0-9] ]]; then
+        echo "Error: invalid measurement iterations $6"
         echo "Error: please specify a numeric value for measurement iterations."
         help
         exit 7
     fi
 }
 
-if [ $# -lt 5 ]
+if [ $# -lt 6 ]
 then
     help
     exit 1
@@ -53,7 +60,7 @@ jvm_args=""
 function compute_jvm_args
 {
     local total_args=$#;
-    local i=5;
+    local i=6;
 
     while [ $i -lt $total_args ]
     do
@@ -100,8 +107,9 @@ std_jvm_opts="-XX:+AlwaysPreTouch -XX:+UseLargePages"
 declare specified_gc=$1
 declare specified_heap_size=$2
 declare num_worker_threads=$3
-declare measurement_iterations=$4
+declare warmup_time=$4
 declare warmup_iterations=$5
+declare measurement_iterations=$6
 
 # Sets the minimum and initial size (in bytes) of the heap. This value must be a multiple of 1024 and greater
 # than 1 MB. Append the letter k or K to indicate kilobytes, m or M to indicate megabytes, g or G to indicate gigabytes.
@@ -153,6 +161,11 @@ synchronize_iterations_opt="-si true"
 #                              modes)
 measurement_iterations_opt="-i $measurement_iterations"
 
+#  -w <time>                   Minimum time to spend at each warmup iteration. Benchmarks
+#                              may generally run longer than iteration duration.
+#                              (default: 10 s)
+warmup_time_opt="-w $warmup_time"
+
 #  -wi <int>                   Number of warmup iterations to do. Warmup iterations 
 #                              are not counted towards the benchmark score. (default: 
 #                              0 for SingleShotTime, and 5 for all other modes)
@@ -183,7 +196,7 @@ machine_readable_output_file_opt="-rff $machine_readable_output_file"
 format_type_opt="-rf text"
 
 benchmark="-jar $benchmark_jar_path"
-benchmark="$benchmark $fork_opt $synchronize_iterations_opt"
+benchmark="$benchmark $fork_opt $synchronize_iterations_opt $warmup_time_opt"
 benchmark="$benchmark $measurement_iterations_opt $warmup_iterations_opt"
 benchmark="$benchmark $worker_threads_opt $human_readable_output_file_opt"
 benchmark="$benchmark $machine_readable_output_file_opt $format_type_opt"
