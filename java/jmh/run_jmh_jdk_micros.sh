@@ -125,6 +125,7 @@ jvm_heap_size_opts="$jvm_initial_heap_size_option$specified_heap_size$heap_size_
 
 echo "Info: Selected heap size: $specified_heap_size GB"
 echo "Info: JVM heap size args: $jvm_heap_size_opts"
+echo ""
 
 timestamp=`date +%Y-%m-%d_%H-%M-%S`
 
