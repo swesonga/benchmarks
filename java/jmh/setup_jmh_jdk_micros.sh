@@ -14,5 +14,8 @@ else
     echo "Skipping jmh-jdk-microbenchmarks setup."
 fi
 
-echo "To view the JMH JDK benchmarks, run this command:"
-echo "java -jar jmh-jdk-microbenchmarks/micros-uber/target/micros-uberpackage-1.0-SNAPSHOT.jar -l"
+echo -e "\nTo view the JMH JDK benchmarks, run:\n"
+echo -e " java -jar jmh-jdk-microbenchmarks/micros-uber/target/micros-uberpackage-1.0-SNAPSHOT.jar -l\n"
+
+echo -e "For a list of JMH command-line options, run:\n"
+echo " java -jar jmh-jdk-microbenchmarks/micros-uber/target/micros-uberpackage-1.0-SNAPSHOT.jar -h"
