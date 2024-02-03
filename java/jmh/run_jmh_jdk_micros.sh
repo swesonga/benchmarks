@@ -230,7 +230,7 @@ crypto_benchmark_filter="(?i)crypto"
 
 # Start the actual benchmark run
 run_benchmarks $atomics_benchmark_filter
-run_benchmarks $crypto_benchmark_filter
+# run_benchmarks $crypto_benchmark_filter
 
 # Display the date and time when the benchmarks complete
 date
