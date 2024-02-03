@@ -1,5 +1,10 @@
 #!/bin/bash
 
+# This script depends on Maven. To install Maven on Ubuntu, run:
+#
+#   sudo apt install maven
+#
+
 mkdir -p applogs
 
 if [ ! -d "jmh-jdk-microbenchmarks" ]; then
